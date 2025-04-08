@@ -11,6 +11,7 @@ if (!function_exists('isAuthenticated')) {
           $_SESSION['userRole'] = $user['userRole'];
           $_SESSION['userEmail'] = $user['userEmail'];
           $_SESSION['userProfileImg'] = $user['userProfileImg'];
+          //checkSubscriptionStatus();
           return true;
         } else {
             header("Location: ../public/login.php");
@@ -18,7 +19,49 @@ if (!function_exists('isAuthenticated')) {
         }
     }
 }
+function checkSubscriptionStatus() {
+    // Ensure user is authenticated first
+    if (!isset($_SESSION['userId'])) {
+        header("Location: ../public/login.php");
+        exit();
+    }
 
+    $user_id = $_SESSION['userId'];
+    $json_dir = '../public/InfoData';
+    $json_file = $json_dir . '/subscription_transactions.json';
+    $currentMonthYear = date('Y-m'); // e.g., "2025-04"
+
+    // Create directory and file if they don’t exist
+    if (!file_exists($json_dir)) {
+        mkdir($json_dir, 0775, true);
+    }
+    if (!file_exists($json_file)) {
+        file_put_contents($json_file, json_encode(['subscriptions' => []], JSON_PRETTY_PRINT));
+    }
+
+    // Read JSON data
+    $data = json_decode(file_get_contents($json_file), true);
+    $subscriptions = $data['subscriptions'] ?? [];
+
+    // Check if user has a completed subscription for this month
+    $subscriptionPaid = false;
+    foreach ($subscriptions as $subscription) {
+        if ($subscription['user_id'] === $user_id && 
+            strpos($subscription['timestamp'], $currentMonthYear) === 0 && 
+            $subscription['status'] === 'completed') {
+            $subscriptionPaid = true;
+            break;
+        }
+    }
+
+    // If no subscription paid for this month, redirect to pay.php
+    if (!$subscriptionPaid) {
+        header("Location: pay.php");
+        exit();
+    }
+
+    return true; // Subscription is paid, proceed
+}
     function isAuthenticatedAsAdmin() {
         if (isset($_SESSION['userId'])) {
           $user=getUserById($_SESSION['userId']);

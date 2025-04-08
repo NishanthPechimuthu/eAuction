@@ -33,8 +33,6 @@ function getUserFromSession() {
     }
 }
 
-
-
 // Fetch all active auctions
 function getActiveAuctions() {
     global $pdo;

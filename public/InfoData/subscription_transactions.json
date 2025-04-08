@@ -1,0 +1,22 @@
+{
+    "subscriptions": [
+        {
+            "transaction_id": "sub_67f4c1fa33d033.12174001",
+            "user_id": 1,
+            "user_type": "unknown",
+            "card_number": "354542545475747",
+            "amount": 1000,
+            "timestamp": "2025-04-08 11:58:10",
+            "status": "completed"
+        },
+        {
+            "transaction_id": "sub_67f4c3d719b123.91597495",
+            "user_id": 1,
+            "user_type": "unknown",
+            "card_number": "454849112545552",
+            "amount": 1000,
+            "timestamp": "2025-04-08 12:06:07",
+            "status": "completed"
+        }
+    ]
+}
