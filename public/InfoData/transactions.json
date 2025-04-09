@@ -32,6 +32,72 @@
             "to": 2,
             "timestamp": "2025-04-09 12:40:30",
             "status": "completed"
+        },
+        {
+            "transaction_id": "txn_67f62f2cc51f60.18560874",
+            "buyer_id": 2,
+            "vendor_id": 1,
+            "auction_id": "17",
+            "card_number": "798451213458745",
+            "amount": "1000.00",
+            "to": "middleman_admin",
+            "timestamp": "2025-04-09 13:56:20",
+            "status": "removed"
+        },
+        {
+            "transaction_id": "txn_67f630e41c50c3.63985259",
+            "buyer_id": 2,
+            "vendor_id": 1,
+            "auction_id": "17",
+            "card_number": "874512023658874",
+            "amount": "1000.00",
+            "to": "middleman_admin",
+            "timestamp": "2025-04-09 14:03:40",
+            "status": "confirmed"
+        },
+        {
+            "transaction_id": "txn_67f636c7017c45.44794141",
+            "buyer_id": 2,
+            "vendor_id": 1,
+            "auction_id": "17",
+            "amount": 950,
+            "from": "middleman_admin",
+            "to": 1,
+            "timestamp": "2025-04-09 14:28:47",
+            "status": "completed"
+        },
+        {
+            "transaction_id": "txn_67f637441c3537.14633964",
+            "buyer_id": 2,
+            "vendor_id": 1,
+            "auction_id": "17",
+            "card_number": "956235995623598956",
+            "amount": "1000.00",
+            "to": "middleman_admin",
+            "timestamp": "2025-04-09 14:30:52",
+            "status": "completed"
+        },
+        {
+            "transaction_id": "txn_67f6425deb7906.77599094",
+            "buyer_id": 2,
+            "vendor_id": 1,
+            "auction_id": "17",
+            "card_number": "7984653122356895326",
+            "amount": "1000.00",
+            "to": "middleman_admin",
+            "timestamp": "2025-04-09 15:18:13",
+            "status": "completed"
+        },
+        {
+            "transaction_id": "txn_67f642aa0421a4.37975769",
+            "vendor_id": 2,
+            "farmer_id": 1,
+            "auction_id": "17",
+            "amount": 950,
+            "from": "middleman_admin",
+            "to": 1,
+            "timestamp": "2025-04-09 15:19:30",
+            "status": "completed"
         }
     ]
 }

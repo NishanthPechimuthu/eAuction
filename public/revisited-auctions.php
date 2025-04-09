@@ -58,7 +58,7 @@ $auctions = getAuctionsParticipate($user_id);
                   </tr>
                   <tr>
                     <td colspan="2"><i class="fa fa-coins"></i>&nbsp;&nbsp;<b>&#8377;&nbsp;</b><?= htmlspecialchars($auction['auctionStartPrice']) ?></td>
-                    <td colspan="2"><i class="fa fa-line-chart"></i>&nbsp;&nbsp;<b>&#8377;&nbsp;</b><?= htmlspecialchars($auction['auctionStartPrice']) ?></td>
+                    <td colspan="2"><i class="fa fa-line-chart"></i>&nbsp;&nbsp;<b>&#8377;&nbsp;</b><?= (getHighestBid($auction["auctionId"]) === 0) ? 'not yet.' : getHighestBid($auction["auctionId"]);?></td>
                   </tr>
                   <tr>
                     <td colspan="2"><i class="fa fa-balance-scale"></i>&nbsp;&nbsp;<?="<b>&nbsp;</b>" . htmlspecialchars($auction['auctionProductQuantity'])." ".htmlspecialchars($auction['auctionProductUnit']) ?></td>
