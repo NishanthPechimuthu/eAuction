@@ -1,0 +1,37 @@
+{
+    "transactions": [
+        {
+            "transaction_id": "txn_67f605a479c9b6.16300264",
+            "buyer_id": 1,
+            "vendor_id": 2,
+            "auction_id": "21",
+            "card_number": "694613461635229",
+            "amount": "1250.00",
+            "to": "middleman_admin",
+            "timestamp": "2025-04-09 10:59:08",
+            "status": "confirmed"
+        },
+        {
+            "transaction_id": "txn_67f61c9e9eef18.50875368",
+            "buyer_id": 1,
+            "vendor_id": 2,
+            "auction_id": "21",
+            "card_number": "8695319784798485",
+            "amount": "1250.00",
+            "to": "middleman_admin",
+            "timestamp": "2025-04-09 12:37:10",
+            "status": "success"
+        },
+        {
+            "transaction_id": "txn_67f61d6611f690.42616651",
+            "buyer_id": 1,
+            "vendor_id": 2,
+            "auction_id": "21",
+            "amount": 1187.5,
+            "from": "middleman_admin",
+            "to": 2,
+            "timestamp": "2025-04-09 12:40:30",
+            "status": "completed"
+        }
+    ]
+}

@@ -1,8 +1,8 @@
 <?php
-$host = '0.0.0.0';
+$host = 'localhost';
 $dbname = 'auction28';
 $username = 'root';
-$password = 'root';
+$password = '';
 $port = '8080';
 date_default_timezone_set('Asia/Kolkata');
 try {

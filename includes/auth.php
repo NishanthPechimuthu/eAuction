@@ -4,64 +4,67 @@ include 'db.php';
 
 if (!function_exists('isAuthenticated')) {
     function isAuthenticated() {
-        if (isset($_SESSION['userId'])) {
-          $user=getUserById($_SESSION['userId']);
-          $_SESSION['userId'] = $user['userId'];
-          $_SESSION['userName'] = $user['userName'];
-          $_SESSION['userRole'] = $user['userRole'];
-          $_SESSION['userEmail'] = $user['userEmail'];
-          $_SESSION['userProfileImg'] = $user['userProfileImg'];
-          //checkSubscriptionStatus();
-          return true;
-        } else {
+        // Check if user is logged in
+        if (!isset($_SESSION['userId'])) {
             header("Location: ../public/login.php");
             exit();
         }
-    }
-}
-function checkSubscriptionStatus() {
-    // Ensure user is authenticated first
-    if (!isset($_SESSION['userId'])) {
-        header("Location: ../public/login.php");
-        exit();
-    }
 
-    $user_id = $_SESSION['userId'];
-    $json_dir = '../public/InfoData';
-    $json_file = $json_dir . '/subscription_transactions.json';
-    $currentMonthYear = date('Y-m'); // e.g., "2025-04"
+        // Fetch user details and update session
+        $user = getUserById($_SESSION['userId']);
+        $_SESSION['userId'] = $user['userId'];
+        $_SESSION['userName'] = $user['userName'];
+        $_SESSION['userRole'] = $user['userRole'];
+        $_SESSION['userEmail'] = $user['userEmail'];
+        $_SESSION['userProfileImg'] = $user['userProfileImg'];
 
-    // Create directory and file if they don’t exist
-    if (!file_exists($json_dir)) {
-        mkdir($json_dir, 0775, true);
-    }
-    if (!file_exists($json_file)) {
-        file_put_contents($json_file, json_encode(['subscriptions' => []], JSON_PRETTY_PRINT));
-    }
+        // Get the current page filename
+        $currentPage = basename($_SERVER['PHP_SELF']);
 
-    // Read JSON data
-    $data = json_decode(file_get_contents($json_file), true);
-    $subscriptions = $data['subscriptions'] ?? [];
-
-    // Check if user has a completed subscription for this month
-    $subscriptionPaid = false;
-    foreach ($subscriptions as $subscription) {
-        if ($subscription['user_id'] === $user_id && 
-            strpos($subscription['timestamp'], $currentMonthYear) === 0 && 
-            $subscription['status'] === 'completed') {
-            $subscriptionPaid = true;
-            break;
+        // Skip subscription check if on pay.php
+        if ($currentPage === 'pay.php') {
+            return true; // Allow pay.php to load even if subscription is unpaid
         }
-    }
 
-    // If no subscription paid for this month, redirect to pay.php
-    if (!$subscriptionPaid) {
-        header("Location: pay.php");
-        exit();
-    }
+        // Check subscription status for other pages
+        $user_id = $_SESSION['userId'];
+        $json_dir = '../public/InfoData';
+        $json_file = $json_dir . '/subscription_transactions.json';
+        $currentMonthYear = date('Y-m'); // e.g., "2025-04"
 
-    return true; // Subscription is paid, proceed
+        // Create directory and file if they don’t exist
+        if (!file_exists($json_dir)) {
+            mkdir($json_dir, 0775, true);
+        }
+        if (!file_exists($json_file)) {
+            file_put_contents($json_file, json_encode(['subscriptions' => []], JSON_PRETTY_PRINT));
+        }
+
+        // Read JSON data
+        $data = json_decode(file_get_contents($json_file), true);
+        $subscriptions = $data['subscriptions'] ?? [];
+
+        // Check if user has a completed subscription for this month
+        $subscriptionPaid = false;
+        foreach ($subscriptions as $subscription) {
+            if ($subscription['user_id'] === $user_id && 
+                strpos($subscription['timestamp'], $currentMonthYear) === 0 && 
+                $subscription['status'] === 'completed') {
+                $subscriptionPaid = true;
+                break;
+            }
+        }
+
+        // If no subscription paid for this month, redirect to pay.php
+        if (!$subscriptionPaid) {
+            header("Location: pay.php");
+            exit();
+        }
+
+        return true; // User is authenticated and has paid subscription
+    }
 }
+
     function isAuthenticatedAsAdmin() {
         if (isset($_SESSION['userId'])) {
           $user=getUserById($_SESSION['userId']);
