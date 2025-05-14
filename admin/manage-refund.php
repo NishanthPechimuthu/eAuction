@@ -410,7 +410,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <p style="text-align: center;"><h2>Payment Processed</h2></p>';
 
                 $pdf->writeHTML($html, true, false, true, false, '');
-                $pdf_file = 'invoice_payment_' . $auction_id . '.pdf';
+                $pdf_file = 'invoice_payment_' . $auction_id . '.pdf ' . $auction_id . '.pdf';
                 $pdf_content = $pdf->Output($pdf_file, 'S');
 
                 // Email to Farmer (Payment after declined refund)
@@ -634,14 +634,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Separate refunds into pending and non-pending
-$pending_refunds = array_filter($refunds, fn($refund) => $refund['status'] === 'pending');
-$non_pending_refunds = array_filter($refunds, fn($refund) => $refund['status'] !== 'pending');
+$pending_refunds = array_filter($refunds, function($refund) {
+    return $refund['status'] === 'pending';
+});
+$non_pending_refunds = array_filter($refunds, function($refund) {
+    return $refund['status'] !== 'pending';
+});
 
 // Sort pending refunds in FIFO (ascending by timestamp)
-usort($pending_refunds, fn($a, $b) => strtotime($a['timestamp']) <=> strtotime($b['timestamp']));
+usort($pending_refunds, function($a, $b) {
+    return strtotime($a['timestamp']) - strtotime($b['timestamp']);
+});
 
 // Sort non-pending refunds in LIFO (descending by timestamp)
-usort($non_pending_refunds, fn($a, $b) => strtotime($b['timestamp']) <=> strtotime($a['timestamp']));
+usort($non_pending_refunds, function($a, $b) {
+    return strtotime($b['timestamp']) - strtotime($a['timestamp']);
+});
 ?>
 
 <!DOCTYPE html>

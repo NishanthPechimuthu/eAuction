@@ -33,6 +33,8 @@
             <a class="dropdown-item" href="./manage-inactivate.php">Manage Inactive Users</a>
             <a class="dropdown-item" href="./manage-auction.php">Manage Auctions</a>
             <a class="dropdown-item" href="./manage-bid.php">Manage Bids</a>
+            <a class="dropdown-item" href="./manage-refund.php">Manage Refunds</a>
+            <a class="dropdown-item" href="./manage-issues.php">Manage issues</a>
           </div>
         </li>
         <li class="nav-item dropdown">

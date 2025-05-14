@@ -49,7 +49,7 @@ function getAuctionsParticipate() {
         header("Location: ../local/login.php"); // User not authenticated
     }
 
-    $sql = "SELECT DISTINCT a.* FROM auctions a JOIN bids b ON a.auctionId = b.bidAuctionId WHERE NOW() > a.auctionEndDate AND b.bidUserId = :user_id AND a.auctionStatus = 'activate';";
+    $sql = "SELECT DISTINCT a.* FROM auctions a JOIN bids b ON a.auctionId = b.bidAuctionId WHERE NOW() > a.auctionEndDate AND b.bidUserId = :user_id AND a.auctionStatus = 'activate' ORDER BY a.auctionEndDate DESC;";
             
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);

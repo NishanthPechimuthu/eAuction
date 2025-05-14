@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 30, 2025 at 04:02 PM
+-- Generation Time: May 14, 2025 at 04:28 PM
 -- Server version: 10.4.6-MariaDB
--- PHP Version: 8.3.8
+-- PHP Version: 7.3.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -144,19 +144,30 @@ CREATE TABLE `auctions` (
 --
 
 INSERT INTO `auctions` (`auctionId`, `auctionTitle`, `auctionStartPrice`, `auctionStartDate`, `auctionEndDate`, `auctionProductImg`, `auctionProductType`, `auctionProductQuantity`, `auctionProductUnit`, `auctionAddress`, `auctionDescription`, `auctionCategoryId`, `auctionCreatedBy`, `auctionStatus`, `createdAt`) VALUES
-(1, 'Whole Grain Bron Rice', 33000.00, '2024-12-21 02:04:00', '2024-12-21 02:04:00', 'prod_676d4ee69bd1d.webp', 'organic', 1.0000, 'ton', 'Pollachi, Comibatore,Tamil Nadu ', 'The brown is nerich in the vitamin, proteins and minerals ', 1, 1, 'activate', '2024-12-26 12:41:10'),
-(2, 'Carrot', 24000.00, '2024-12-25 02:13:00', '2024-12-24 04:13:00', 'prod_676d4f8daa79b.webp', 'organic', 2.0000, 'ton', 'Udumalipettai, Tiruppur,Tamil Nadu,Indian-642205', 'The High commissioner ', 3, 1, 'activate', '2024-12-26 12:43:57'),
-(3, 'Morise Banna Bunchs', 1550.00, '2024-12-27 02:18:00', '2024-12-26 02:18:00', 'auction_67751d9f44f313.20307425.webp', 'organic', 70.0000, 'kg', 'Chennai , Tamil Nadu , india - 6400001', 'The High quality banana there ready in 2 days for harvest ', 3, 1, 'activate', '2024-12-26 12:50:20'),
-(4, 'Halo Potato', 24000.00, '2024-12-19 03:09:00', '2024-12-31 03:10:00', 'prod_676d5cc30126d.webp', 'hybrid', 3.0000, 'ton', 'Udumalipettai, Tiruppur,Tamil Nadu,Indian-642205', '6337', 3, 12, 'activate', '2024-12-26 13:40:19'),
-(5, 'Banana stem', 9000.00, '2024-12-27 03:14:00', '2025-01-02 03:14:00', 'prod_676d5de39c33c.webp', 'hybrid', 250.0000, 'nos', 'Udumalipettai, Tiruppur,Tamil Nadu', 'The Banana stem is good for health ', 3, 2, 'activate', '2024-12-26 13:45:07'),
-(6, 'Sunflower seeds', 45000.00, '2024-12-27 03:28:00', '2024-12-26 03:28:00', 'prod_676d6108e7694.webp', 'organic', 360.0000, 'kg', '1/283,somavarapatti', 'Sunflower seeds ', 4, 2, 'activate', '2024-12-26 13:58:32'),
-(7, 'Musted Oli seeds', 20000.00, '2024-12-25 03:38:00', '2024-12-26 03:38:00', 'prod_676d638432d39.webp', 'hybrid', 2.0000, 'ton', 'Udumalipettai, Tiruppur,Tamil Nadu', 'Oli seeds', 4, 2, 'activate', '2024-12-26 14:09:08'),
-(8, 'radish', 500.00, '2025-01-05 13:57:00', '2025-01-09 13:57:00', 'auction_677ea16404b682.95128271.webp', 'organic', 120.0000, 'kg', 'Udumalipettai, Tiruppur,Tamil Nadu,Indian-642205', 'radish Radish ', 3, 1, 'activate', '2025-01-05 13:57:21'),
-(9, 'Wheat', 4664.00, '2025-01-05 21:37:00', '2025-01-08 21:37:00', 'prod_677ab53d02ef4.webp', 'hybrid', 4564.0000, 'kg', 'Dbs', 'Gshs', 3, 1, 'activate', '2025-01-05 16:37:17'),
-(10, 'Radishs', 5478.00, '2025-01-06 06:13:00', '2025-01-06 10:13:00', 'auction_677e9e288df205.57973118.webp', 'organic', 12.0000, 'kg', 'Udumalipettai, Tiruppur,Tamil Nadu,Indian-642205', 'Tj', 3, 1, 'activate', '2025-01-06 06:14:53'),
-(11, 'Carrot', 15000.00, '2025-01-12 03:18:00', '2025-01-15 03:18:00', 'prod_6783349836484.webp', 'organic', 140.0000, 'kg', 'Udumalipettai, Tiruppur,Tamil Nadu,Indian-642205', 'Good for health ', 3, 1, 'activate', '2025-01-12 03:18:48'),
-(12, 'Banana', 15800.00, '2025-01-12 03:27:00', '2025-01-18 03:27:00', 'prod_678336bf99098.webp', 'organic', 149.0000, 'nos', 'Udumalipettai, Tiruppur,Tamil Nadu,Indian-642205', 'Banana ', 2, 1, 'activate', '2025-01-12 03:27:59'),
-(13, 'Apple', 15000.00, '2025-01-30 15:16:00', '2025-02-02 15:16:00', 'prod_679b97d9cc467.webp', 'organic', 120.0000, 'kg', 'Udumalipettai, Tiruppur,Tamil Nadu,Indian-642205', 'Hs', 2, 1, 'activate', '2025-01-30 15:16:41');
+(1, 'Whole Grain Bron Rice', 33000.00, '2025-02-21 03:11:37', '2024-12-21 02:04:00', 'prod_676d4ee69bd1d.webp', 'organic', 1.0000, 'ton', 'Pollachi, Comibatore,Tamil Nadu ', 'The brown is nerich in the vitamin, proteins and minerals ', 1, 1, 'suspend', '2024-12-26 12:41:10'),
+(2, 'Carrot', 24000.00, '2025-02-21 03:11:33', '2024-12-24 04:13:00', 'prod_676d4f8daa79b.webp', 'organic', 2.0000, 'ton', 'Udumalipettai, Tiruppur,Tamil Nadu,Indian-642205', 'The High commissioner ', 3, 1, 'suspend', '2024-12-26 12:43:57'),
+(3, 'Morise Banna Bunchs', 1550.00, '2025-02-21 03:11:28', '2024-12-26 02:18:00', 'auction_67751d9f44f313.20307425.webp', 'organic', 70.0000, 'kg', 'Chennai , Tamil Nadu , india - 6400001', 'The High quality banana there ready in 2 days for harvest ', 3, 1, 'suspend', '2024-12-26 12:50:20'),
+(4, 'Halo Potato', 24000.00, '2024-12-19 03:09:00', '2024-12-31 03:10:00', 'auction_67e2c65e6b8316.07770015.webp', 'hybrid', 3.0000, 'ton', 'Udumalipettai, Tiruppur,Tamil Nadu,Indian-642205', '6337', 3, 12, 'activate', '2024-12-26 13:40:19'),
+(5, 'Banana stem', 9000.00, '2025-02-21 03:22:35', '2025-01-02 03:14:00', 'prod_676d5de39c33c.webp', 'hybrid', 250.0000, 'nos', 'Udumalipettai, Tiruppur,Tamil Nadu', 'The Banana stem is good for health ', 3, 2, 'suspend', '2024-12-26 13:45:07'),
+(6, 'Sunflower seeds', 45000.00, '2025-02-21 03:22:33', '2024-12-26 03:28:00', 'prod_676d6108e7694.webp', 'organic', 360.0000, 'kg', '1/283,somavarapatti', 'Sunflower seeds ', 4, 2, 'suspend', '2024-12-26 13:58:32'),
+(7, 'Musted Oli seeds', 20000.00, '2025-02-21 03:22:31', '2024-12-26 03:38:00', 'prod_676d638432d39.webp', 'hybrid', 2.0000, 'ton', 'Udumalipettai, Tiruppur,Tamil Nadu', 'Oli seeds', 4, 2, 'suspend', '2024-12-26 14:09:08'),
+(8, 'radish', 500.00, '2025-02-21 03:11:26', '2025-01-09 13:57:00', 'auction_677ea16404b682.95128271.webp', 'organic', 120.0000, 'kg', 'Udumalipettai, Tiruppur,Tamil Nadu,Indian-642205', 'radish Radish ', 3, 1, 'suspend', '2025-01-05 13:57:21'),
+(9, 'Wheat', 4664.00, '2025-02-21 03:11:24', '2025-01-08 21:37:00', 'prod_677ab53d02ef4.webp', 'hybrid', 4564.0000, 'kg', 'Dbs', 'Gshs', 3, 1, 'suspend', '2025-01-05 16:37:17'),
+(10, 'Radishs', 5478.00, '2025-02-21 03:11:22', '2025-01-06 10:13:00', 'auction_677e9e288df205.57973118.webp', 'organic', 12.0000, 'kg', 'Udumalipettai, Tiruppur,Tamil Nadu,Indian-642205', 'Tj', 3, 1, 'suspend', '2025-01-06 06:14:53'),
+(11, 'Carrot', 15000.00, '2025-02-21 03:11:20', '2025-01-15 03:18:00', 'prod_6783349836484.webp', 'organic', 140.0000, 'kg', 'Udumalipettai, Tiruppur,Tamil Nadu,Indian-642205', 'Good for health ', 3, 1, 'suspend', '2025-01-12 03:18:48'),
+(12, 'Banana', 15800.00, '2025-02-21 03:11:18', '2025-01-18 03:27:00', 'prod_678336bf99098.webp', 'organic', 149.0000, 'nos', 'Udumalipettai, Tiruppur,Tamil Nadu,Indian-642205', 'Banana ', 2, 1, 'suspend', '2025-01-12 03:27:59'),
+(13, 'Apple', 15000.00, '2025-02-21 03:11:16', '2025-02-02 15:16:00', 'prod_679b97d9cc467.webp', 'organic', 120.0000, 'kg', 'Udumalipettai, Tiruppur,Tamil Nadu,Indian-642205', 'Hs', 2, 1, 'suspend', '2025-01-30 15:16:41'),
+(14, 'Carrot', 8000.00, '2025-02-19 03:10:00', '2025-02-24 03:10:00', 'prod_67b7eed0e4260.webp', 'organic', 100.0000, 'kg', 'Udumalipettai, Tiruppur,Tamil Nadu,Indian-642205', 'Good carrot ', 3, 1, 'activate', '2025-02-21 03:11:12'),
+(15, 'white onion', 15000.00, '2025-02-19 03:14:00', '2025-02-22 03:14:00', 'prod_67b7f01ac9809.webp', 'hybrid', 580.0000, 'kg', 'Udumalipettai, Tiruppur,Tamil Nadu,Indian-642205', 'Good white onion ', 3, 1, 'activate', '2025-02-21 03:16:42'),
+(16, 'Banana Steam', 10000.00, '2025-02-20 03:20:00', '2025-02-23 03:20:00', 'prod_67b7f1741c863.webp', 'organic', 450.0000, 'nos', 'Udumalipettai, Tiruppur,Tamil Nadu,Indian-642205', 'Steam is good ', 3, 2, 'activate', '2025-02-21 03:22:28'),
+(17, 'Hs', 979.00, '2025-03-13 16:33:00', '2025-03-12 16:33:00', 'prod_67d308f79f184.webp', 'organic', 9464.0000, 'nos', 'Bzbs', 'Vdhd', 2, 1, 'activate', '2025-03-13 16:33:59'),
+(18, 'H', 55.00, '2025-03-25 15:00:00', '2025-03-26 15:00:00', 'prod_67e2c50aa87e6.webp', 'hybrid', 5.0000, 'kg', 'Ghjj', 'Gh', 1, 1, 'activate', '2025-03-25 15:00:26'),
+(19, 'Hsh', 66.00, '2025-03-25 15:01:00', '2025-03-26 15:01:00', 'prod_67e2c5415ad8c.webp', 'organic', 9.0000, 'kg', 'Bh', 'Vh', 4, 1, 'activate', '2025-03-25 15:01:21'),
+(20, 'Mango', 500.00, '2025-04-09 02:18:00', '2025-04-09 02:18:00', 'prod_67f5d92055414.webp', 'organic', 50.0000, 'kg', 'Hjj', 'Bhjk', 2, 2, 'activate', '2025-04-09 02:19:12'),
+(21, 'Hello', 5000.00, '2025-04-12 16:01:00', '2025-04-12 16:03:00', 'prod_67fa8e8393c01.webp', 'hybrid', 158.0000, 'kg', 'Udumalipettai, Tiruppur,Tamil Nadu,Indian-642205', 'Hello bro', 2, 1, 'activate', '2025-04-12 16:02:11'),
+(22, '22', 50000.00, '2025-05-06 07:20:00', '2025-05-06 07:22:00', 'prod_6819b867c8519.webp', 'hybrid', 158.0000, 'kg', 'Udumalipettai, Tiruppur,Tamil Nadu,Indian-642205', 'Ty', 1, 2, 'activate', '2025-05-06 07:21:11'),
+(23, '1', 500.00, '2025-05-07 05:57:00', '2025-05-07 05:58:00', 'prod_681af6437fa8a.webp', 'organic', 25.0000, 'kg', 'Udumalipettai, Tiruppur,Tamil Nadu,Indian-642205', '66', 1, 1, 'activate', '2025-05-07 05:57:23'),
+(24, 'Carrot', 100.00, '2025-05-14 08:28:00', '2025-05-15 08:30:00', 'prod_6824545c370da.webp', 'organic', 100.0000, 'kg', 'Udumalipettai, Tiruppur,Tamil Nadu,Indian-642205', 'Description ', 1, 1, 'activate', '2025-05-14 08:29:16');
 
 -- --------------------------------------------------------
 
@@ -202,7 +213,15 @@ INSERT INTO `bids` (`bidId`, `bidAuctionId`, `bidUserId`, `bidAmount`, `createdA
 (23, 7, 1, 28000.00, '2024-12-26 14:10:32'),
 (24, 1, 13, 39000.00, '2024-12-11 13:34:57'),
 (25, 5, 1, 16002.00, '2024-12-27 02:00:22'),
-(26, 11, 2, 15500.00, '2025-01-12 03:47:12');
+(26, 11, 2, 15500.00, '2025-01-12 03:47:12'),
+(27, 17, 2, 1000.00, '2025-03-13 16:44:05'),
+(28, 20, 1, 550.00, '2025-04-09 02:19:44'),
+(29, 20, 8, 600.00, '2025-04-09 02:20:01'),
+(30, 20, 1, 651.00, '2025-04-09 02:20:17'),
+(31, 21, 2, 5001.00, '2025-04-12 16:03:05'),
+(32, 22, 1, 55000.00, '2025-05-06 07:21:57'),
+(33, 23, 2, 550.00, '2025-05-07 05:57:49'),
+(34, 24, 2, 150.00, '2025-05-14 08:29:44');
 
 -- --------------------------------------------------------
 
@@ -252,11 +271,15 @@ CREATE TABLE `heroes` (
 
 INSERT INTO `heroes` (`heroId`, `heroTitle`, `heroImg`, `heroMessage`, `heroContent`, `heroStatus`, `createdAt`) VALUES
 (1, 'Welcome to eAuction78', 'hero_677522e35a761.webp', 'Join our online auction platform!', '<p>eAuction is an online platform where farmers and buyers can participate in live auctions of agricultural products. It ensures transparent bidding and fair market prices.</p>', 'suspend', '2024-12-29 14:01:33'),
-(2, 'Agri Marketplace', 'img/2.jpg', 'Buy and sell agricultural products easily!', 'Our platform helps farmers and buyers connect easily for buying and selling agricultural products. It promotes fair trade and efficient distribution.', 'activate', '2024-12-29 14:01:33'),
-(3, 'Vendor Partnership', 'img/3.jpg', 'Join our vendor network and grow your business!', 'Vendors can showcase their agricultural products to a wide audience through our eAgri Auction platform, connecting with farmers and buyers across the country.', 'activate', '2024-12-29 14:01:33'),
-(4, 'The', 'hero_6772c798ccc51.webp', 'The', '<p style=\"padding-left: 40px;\">The</p>', 'activate', '2024-12-30 16:17:28'),
-(5, 'Happy New Year 2025', 'hero_677536c45a89c.webp', 'This is to good year', '<p>&nbsp;</p>\r\n<div class=\"dots dot1\">&nbsp;</div>\r\n<div class=\"dots dot2\">&nbsp;</div>\r\n<div class=\"dots dot3\">&nbsp;</div>\r\n<div class=\"dots dot4\">&nbsp;</div>\r\n<div class=\"dots dot5\">&nbsp;</div>\r\n<div class=\"dots dot6\">&nbsp;</div>\r\n<div class=\"dots dot7\">Hello</div>\r\n<div class=\"dots dot8\">&nbsp;</div>\r\n<div class=\"dots dot9\">&nbsp;</div>\r\n<div class=\"dots dot10\">&nbsp;</div>', 'activate', '2025-01-01 11:16:20'),
-(6, 'Tes', 'hero_67752ae152a12.webp', 'Hell', '<p>Eje</p>\r\n<p><strong>hi</strong></p>', 'activate', '2025-01-01 11:45:37');
+(2, 'Agri Marketplace', 'img/2.jpg', 'Buy and sell agricultural products easily!', '<p>Our platform helps farmers and buyers connect easily for buying and selling agricultural products. It promotes fair trade and efficient distribution.</p>', 'suspend', '2024-12-29 14:01:33'),
+(3, 'Vendor Partnership', 'img/3.jpg', 'Join our vendor network and grow your business!', 'Vendors can showcase their agricultural products to a wide audience through our eAgri Auction platform, connecting with farmers and buyers across the country.', 'suspend', '2024-12-29 14:01:33'),
+(4, 'The', 'hero_6772c798ccc51.webp', 'The', '<p style=\"padding-left: 40px;\">The</p>', 'suspend', '2024-12-30 16:17:28'),
+(5, 'Happy New Year 2025', 'hero_677536c45a89c.webp', 'This is to good year', '<p>&nbsp;</p>\r\n<div class=\"dots dot1\">&nbsp;</div>\r\n<div class=\"dots dot2\">&nbsp;</div>\r\n<div class=\"dots dot3\">&nbsp;</div>\r\n<div class=\"dots dot4\">&nbsp;</div>\r\n<div class=\"dots dot5\">&nbsp;</div>\r\n<div class=\"dots dot6\">&nbsp;</div>\r\n<div class=\"dots dot7\">Hello</div>\r\n<div class=\"dots dot8\">&nbsp;</div>\r\n<div class=\"dots dot9\">&nbsp;</div>\r\n<div class=\"dots dot10\">&nbsp;</div>', 'suspend', '2025-01-01 11:16:20'),
+(6, 'Tes', 'hero_67752ae152a12.webp', 'Hell', '<p>Eje</p>\r\n<p><strong>hi</strong></p>', 'suspend', '2025-01-01 11:45:37'),
+(7, 'The', 'hero_67a6251114ab6.webp', 'The hell paradise', '<p>Ujdfhjskskshsndndn gshsjsk gshsj ysuwiw ywheiwk</p>', 'suspend', '2025-02-07 15:21:53'),
+(8, 'Jdjd', 'hero_67a6256d7a9ed.webp', 'Sbbs', '<p>Shsjnsjskdksjjdjsjsjwj <strong><em>whhsjw</em></strong></p>', 'suspend', '2025-02-07 15:23:25'),
+(9, 'Revolutionizing Agricultural Trade', 'hero_67b7ed46e7955.webp', 'Sell your harvest at the best', '<p><strong>eAgriAuction</strong> is an innovative online platform that empowers farmers to auction their produce directly to buyers. <br />By eliminating middlemen, we ensure fair pricing, transparency, and a seamless trading experience. Join us today and take control of your agricultural sales!</p>', 'activate', '2025-02-21 03:04:38'),
+(10, 'Empowering Farmers, Ensuring Fair Prices', 'hero_67b7edc51146f.webp', 'Sell directly &amp; earn more', '<p>With eAgriAuction, farmers gain direct market access, competitive bidding opportunities, and secure payments. Our platform ensures a fair and transparent auction process, helping you get the true value for your produce. Start selling smarter with eAgriAuction today!</p>', 'activate', '2025-02-21 03:06:45');
 
 -- --------------------------------------------------------
 
@@ -283,7 +306,13 @@ INSERT INTO `interests` (`interestId`, `interestUserId`, `interestCategoryId`, `
 (3, 2, 2, 'both', 'banana ', '2025-01-30 02:34:04'),
 (4, 2, 4, 'both', 'banana ', '2025-01-30 02:34:04'),
 (5, 1, 2, 'both', 'grapefruit', '2025-01-30 15:48:43'),
-(6, 1, 4, 'both', 'grapefruit', '2025-01-30 15:48:43');
+(6, 1, 4, 'both', 'grapefruit', '2025-01-30 15:48:43'),
+(7, 1, 3, 'hybrid', 'Tg', '2025-03-26 00:00:13'),
+(8, 1, 3, 'hybrid', 'Tg', '2025-03-26 00:00:22'),
+(9, 1, 3, 'hybrid', 'Tg', '2025-03-26 00:04:48'),
+(10, 1, 3, 'hybrid', 'Tg', '2025-03-26 00:04:54'),
+(11, 1, 3, 'hybrid', 'Tg', '2025-03-26 00:09:21'),
+(12, 1, 2, 'organic', 'carrot onion beetroot ', '2025-05-14 08:33:07');
 
 -- --------------------------------------------------------
 
@@ -351,10 +380,10 @@ CREATE TABLE `reviews` (
 INSERT INTO `reviews` (`reviewId`, `reviewUserId`, `reviewMessage`, `reviewStatus`, `createdAt`) VALUES
 (1, 1, 'This platform is excellent for connecting farmers directly with buyers. Keep up the good work!', 'activate', '2024-12-29 10:48:51'),
 (2, 2, 'I appreciate the efforts to simplify agricultural auctions, but adding more product categories would be helpful.', 'activate', '2024-12-29 10:48:51'),
-(3, 3, 'Amazing user interface! It’s easy to navigate and understand.', 'suspend', '2024-12-29 10:48:51'),
+(3, 3, 'Amazing user interface! It’s easy to navigate and understand.', 'activate', '2024-12-29 10:48:51'),
 (4, 4, 'The bidding system is great, but there should be an option to set reminders for auction deadlines.', 'activate', '2024-12-29 10:48:51'),
 (6, 1, 'The', 'deactivate', '2025-01-06 08:37:12'),
-(7, 1, 'Hello', 'activate', '2025-01-06 08:40:30'),
+(7, 1, 'Hello', 'deactivate', '2025-01-06 08:40:30'),
 (8, 1, 'Hello', 'deactivate', '2025-01-06 08:40:32'),
 (9, 1, 'Hello', 'deactivate', '2025-01-06 09:06:17'),
 (10, 1, 'He', 'deactivate', '2025-01-06 09:07:14'),
@@ -366,7 +395,8 @@ INSERT INTO `reviews` (`reviewId`, `reviewUserId`, `reviewMessage`, `reviewStatu
 (16, 1, '3D', 'deactivate', '2025-01-30 15:58:08'),
 (17, 1, 'Eh', 'deactivate', '2025-01-30 15:59:22'),
 (18, 1, '83', 'deactivate', '2025-01-30 16:00:30'),
-(19, 1, 'Eh', 'deactivate', '2025-01-30 16:01:34');
+(19, 1, 'Eh', 'deactivate', '2025-01-30 16:01:34'),
+(20, 1, 'Hr', 'deactivate', '2025-03-26 00:00:20');
 
 -- --------------------------------------------------------
 
@@ -382,6 +412,7 @@ CREATE TABLE `trans` (
   `transUserId` int(11) NOT NULL,
   `transAmount` decimal(10,2) NOT NULL,
   `transAuctionId` int(11) NOT NULL,
+  `transStatus` enum('activate','deactivate','suspend') NOT NULL,
   `createdAt` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -389,11 +420,13 @@ CREATE TABLE `trans` (
 -- Dumping data for table `trans`
 --
 
-INSERT INTO `trans` (`transId`, `transTrackingId`, `transCardNo`, `transAccountNo`, `transUserId`, `transAmount`, `transAuctionId`, `createdAt`) VALUES
-(1, 'txn_676d68b350bb66.18771088', '987774567890123', '11130100007375', 1, 48850.00, 6, '2024-12-26 14:31:15'),
-(2, 'txn_676e0b1bced9d7.43560180', '1234567894561', '11130100007375', 1, 28000.00, 7, '2024-12-27 02:04:11'),
-(3, 'txn_677515b9d5c351.00985673', '9876543210273', '11130100007375', 1, 49850.00, 6, '2025-01-01 10:15:21'),
-(4, 'txn_677ba1ef37d263.75877239', '123456272827828', '36738383847885', 1, 28000.00, 4, '2025-01-06 09:27:11');
+INSERT INTO `trans` (`transId`, `transTrackingId`, `transCardNo`, `transAccountNo`, `transUserId`, `transAmount`, `transAuctionId`, `transStatus`, `createdAt`) VALUES
+(1, 'txn_67d3182d74edc1.61799783', '5646578554334355', '11130100005354', 2, 1000.00, 17, 'activate', '2025-03-13 17:38:53'),
+(2, 'txn_67f5d778d93156.62923995', '7995574674456', '36738383847885', 1, 28000.00, 4, 'activate', '2025-04-09 02:12:08'),
+(3, 'txn_67f5da030be279.47122773', '6899765678900770', '11130100007375', 1, 651.00, 20, 'activate', '2025-04-09 02:22:59'),
+(4, 'txn_67fa8fa267b105.55964143', '6738399292002', '11130100005354', 2, 5001.00, 21, 'deactivate', '2025-04-12 16:06:58'),
+(5, 'txn_6819b9114980f2.34485906', '356875435675367', '11130100007375', 1, 55000.00, 22, 'deactivate', '2025-05-06 07:24:01'),
+(6, 'txn_681af6aac04f90.68650128', '234778546733585', '11130100005354', 2, 550.00, 23, 'deactivate', '2025-05-07 05:59:06');
 
 -- --------------------------------------------------------
 
@@ -576,13 +609,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `auctions`
 --
 ALTER TABLE `auctions`
-  MODIFY `auctionId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `auctionId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `bids`
 --
 ALTER TABLE `bids`
-  MODIFY `bidId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `bidId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -594,13 +627,13 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `heroes`
 --
 ALTER TABLE `heroes`
-  MODIFY `heroId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `heroId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `interests`
 --
 ALTER TABLE `interests`
-  MODIFY `interestId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `interestId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `moments`
@@ -618,13 +651,13 @@ ALTER TABLE `passResets`
 -- AUTO_INCREMENT for table `reviews`
 --
 ALTER TABLE `reviews`
-  MODIFY `reviewId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `reviewId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `trans`
 --
 ALTER TABLE `trans`
-  MODIFY `transId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `transId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `userActivate`
