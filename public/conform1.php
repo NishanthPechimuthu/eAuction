@@ -56,81 +56,14 @@ if (!$transaction) {
     exit();
 }
 
-// Check if auction has ended and 7 hours have passed
-$auction_ended = false;
-$can_remove_bidder = false;
-if (strtotime($auction['auctionEndDate']) < time()) {
-    $auction_ended = true;
-    $hours_since_end = (time() - strtotime($auction['auctionEndDate'])) / 3600;
-    if ($hours_since_end >= 7) {
-        $can_remove_bidder = true;
-    }
-}
-
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
     $transaction_id = $transaction['transaction_id'];
 
-    if ($action === 'remove_bidder' && $user_id === $farmer_id && $can_remove_bidder) {
-        // Remove the highest bidder's record from the bids table
-        $query = "DELETE FROM bids WHERE bidAuctionId = :auction_id AND bidUserId = :vendor_id";
-        $stmt = $pdo->prepare($query);
-        $stmt->execute([
-            ':auction_id' => $auction_id,
-            ':vendor_id' => $vendor_id
-        ]);
-
-        if ($stmt->rowCount() > 0) {
-            // Update transaction status to 'cancelled' in JSON
-            foreach ($data['transactions'] as &$t) {
-                if ($t['transaction_id'] === $transaction_id) {
-                    $t['status'] = 'cancelled';
-                    break;
-                }
-            }
-            file_put_contents($json_file, json_encode($data, JSON_PRETTY_PRINT));
-
-            // Update transStatus to 'suspend' in MySQL
-            $query = "UPDATE trans SET transStatus = 'suspend' WHERE transAuctionId = :auction_id";
-            $stmt = $pdo->prepare($query);
-            $stmt->execute([':auction_id' => $auction_id]);
-
-            echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
-            echo "<script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        Swal.fire({
-                            title: 'Success!',
-                            text: 'Highest bidder record removed successfully.',
-                            icon: 'success',
-                            confirmButtonText: 'OK',
-                            confirmButtonColor: '#28a745'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                window.location.href = 'index.php';
-                            }
-                        });
-                    });
-                  </script>";
-        } else {
-            echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
-            echo "<script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        Swal.fire({
-                            title: 'Error',
-                            text: 'Failed to remove highest bidder record.',
-                            icon: 'error',
-                            confirmButtonColor: '#dc3545'
-                        });
-                    });
-                  </script>";
-        }
-        exit();
-    }
-
     if ($user_id === $vendor_id) {
         if ($action === 'proceed') {
-            // Update existing transaction status (Vendor to Middleman - completed)
+            // Update existing transaction status
             foreach ($data['transactions'] as &$t) {
                 if ($t['transaction_id'] === $transaction_id) {
                     $t['status'] = 'completed';
@@ -155,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             file_put_contents($json_file, json_encode($data, JSON_PRETTY_PRINT));
 
             // Update transStatus in MySQL
-            $query = "UPDATE trans SET transStatus = 'activate' WHERE transAuctionId = :auction_id";
+            $query = "UPDATE trans SET transStatus = 'completed' WHERE transAuctionId = :auction_id";
             $stmt = $pdo->prepare($query);
             $stmt->execute([':auction_id' => $auction_id]);
 
@@ -414,7 +347,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'farmer_id' => $farmer_id,
                     'amount' => $highest_bid,
                     'image_paths' => $image_paths,
-                    'status' => 'pending',
+                    'status' => 'pending_admin_review',
                     'timestamp' => date('Y-m-d H:i:s')
                 ];
                 $refund_data['refunds'][] = $refund_entry;
@@ -430,7 +363,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 file_put_contents($json_file, json_encode($data, JSON_PRETTY_PRINT));
 
                 // Update transStatus in MySQL
-                $query = "UPDATE trans SET transStatus = 'deactivate' WHERE transAuctionId = :auction_id";
+                $query = "UPDATE trans SET transStatus = 'refund_requested' WHERE transAuctionId = :auction_id";
                 $stmt = $pdo->prepare($query);
                 $stmt->execute([':auction_id' => $auction_id]);
 
@@ -555,7 +488,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                             <div class="footer">
                                 <p>eAgri Auction | 1/283, Somvarapatti, Udumalpet, Tiruppur, Tamil Nadu - 642205</p>
-                                <p><a href="mailto:eagri.ct.ws@gmail.com">eagri.ct.ws@gmail.com</a> | +91-801586 gerente4344</p>
+                                <p><a href="mailto:eagri.ct.ws@gmail.com">eagri.ct.ws@gmail.com</a> | +91-8015864344</p>
                             </div>
                         </div>
                     </body>
@@ -611,7 +544,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <p><strong>Auction ID:</strong> ' . $auction_id . '</p>
                                     <p><strong>Amount:</strong> ₹' . $highest_bid . '</p>
                                     <p><strong>Transaction ID:</strong> ' . htmlspecialchars(explode('_', explode('.', $transaction_id)[0])[1]) . '</p>
-                                    <p><strong>Status:</strong> Pending</p>
+                                    <p><strong>Status:</strong> Pending admin review</p>
                                 </div>
                                 <p>We will notify you once the review is complete.</p>
                             </div>
@@ -674,88 +607,78 @@ include("navbar.php");
     <?php include("../assets/link.html"); ?>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        .table-responsive { overflow-x: auto; }
+        td {
+            height: 50px;
+            line-height: 50px;
+        }
         td, th {
             min-width: 100px;
+            max-width: 140px;
             text-align: center;
             vertical-align: middle;
-            padding: 12px;
+            white-space: nowrap;
+            overflow: auto;
+            padding: 10px;
         }
-        .btn { width: 100%; max-width: 250px; margin: 10px auto; }
-        .form-group { margin-bottom: 20px; }
-        .text-muted { font-size: 0.9rem; }
         @media (max-width: 768px) {
-            th, td { font-size: 0.85rem; padding: 8px; }
-            .btn { font-size: 0.9rem; padding: 8px; }
-            .form-group { margin-bottom: 15px; }
-            .text-muted { font-size: 0.8rem; }
-        }
-        @media (max-width: 576px) {
-            th, td { font-size: 0.75rem; padding: 6px; }
-            .btn { font-size: 0.8rem; padding: 6px; }
-            .form-group label { font-size: 0.9rem; }
+            td {
+                height: 40px;
+                line-height: 40px;
+            }
+            th, td {
+                font-size: 12px;
+                padding: 5px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container py-4">
-        <div class="card mb-4 shadow-sm">
-            <div class="card-header bg-primary text-white">
+    <div class="container py-5">
+        <div class="card mb-4">
+            <div class="card-header">
                 <i class="fas fa-check-circle me-1"></i> Confirm Transaction - Auction #<?php echo $auction_id; ?>
             </div>
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Auction Title</th>
-                                <th>Amount</th>
-                                <th>Farmer</th>
-                                <th>Vendor</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><?php echo htmlspecialchars($auction["auctionTitle"]); ?></td>
-                                <td>₹<?php echo $highest_bid; ?></td>
-                                <td><?php echo htmlspecialchars($farmer["userName"]); ?></td>
-                                <td><?php echo htmlspecialchars($vendor["userName"]); ?></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Auction Title</th>
+                            <th>Amount</th>
+                            <th>Farmer</th>
+                            <th>Vendor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><?php echo htmlspecialchars($auction["auctionTitle"]); ?></td>
+                            <td>₹<?php echo $highest_bid; ?></td>
+                            <td><?php echo htmlspecialchars($farmer["userName"]); ?></td>
+                            <td><?php echo htmlspecialchars($vendor["userName"]); ?></td>
+                        </tr>
+                    </tbody>
+                </table>
 
                 <?php if ($user_id === $vendor_id): ?>
                     <form method="POST" enctype="multipart/form-data" id="confirmForm" class="mt-4">
-                        <div class="form-group text-center">
-                            <button type="button" class="btn btn-success fw-bold" onclick="confirmProceed()">Proceed Payment to Farmer</button>
+                        <div class="mb-3">
+                            <button type="button" class="btn btn-success btn-sm fw-bold text-white w-100" onclick="confirmProceed()">Proceed Payment to Farmer</button>
                         </div>
-                        <div class="form-group">
+                        <div class="mb-3">
                             <label for="proof" class="form-label">Request Refund (Upload 1-3 Proof Images):</label>
                             <input type="file" name="proof[]" id="proof" accept="image/*" multiple class="form-control">
-                            <button type="button" class="btn btn-danger fw-bold mt-2" onclick="confirmRefund()">Request Refund</button>
+                            <button type="button" class="btn btn-danger btn-sm fw-bold text-white w-100 mt-2" onclick="confirmRefund()">Request Refund</button>
                         </div>
                         <input type="hidden" name="action" id="formAction">
                         <p class="text-muted text-center">Note: Refund requests require admin approval. Please upload clear images to support your claim.</p>
                     </form>
-                <?php elseif ($user_id === $farmer_id): ?>
-                    <?php if ($auction_ended): ?>
-                        <form method="POST" class="mt-4 text-center">
-                            <input type="hidden" name="action" value="remove_bidder">
-                            <button type="button" class="btn btn-warning fw-bold" onclick="confirmRemoveBidder()" <?php echo $can_remove_bidder ? '' : 'disabled'; ?>>
-                                Remove Highest Bidder
-                            </button>
-                            <p class="text-muted mt-2">
-                                <?php echo $can_remove_bidder ? 'Remove the current highest bidder if they failed to proceed.' : 'This action is available 7 hours after the auction ends.'; ?>
-                            </p>
-                        </form>
-                    <?php else: ?>
-                        <p class="text-muted text-center mt-3">The auction is still ongoing. Please wait until it ends to take actions.</p>
-                    <?php endif; ?>
                 <?php else: ?>
                     <p class="text-muted text-center mt-3">Please wait for the vendor to confirm the transaction.</p>
                 <?php endif; ?>
             </div>
+        </div>
+        <div class="text-center mt-4">
+            <p>eAgri Auction | 1/283, Somvarapatti, Udumalpet, Tiruppur, Tamil Nadu - 642205</p>
+            <p><a href="mailto:eagri.ct.ws@gmail.com">eagri.ct.ws@gmail.com</a> | +91-8015864344</p>
         </div>
     </div>
 
@@ -807,27 +730,9 @@ include("navbar.php");
                 }
             }
 
-            function confirmRemoveBidder() {
-                Swal.fire({
-                    title: 'Remove Highest Bidder',
-                    text: 'Are you sure you want to remove the current highest bidder? This action cannot be undone.',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes',
-                    cancelButtonText: 'No',
-                    confirmButtonColor: '#f39c12',
-                    cancelButtonColor: '#6c757d'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        document.forms[1].submit();
-                    }
-                });
-            }
-
             // Expose functions to global scope for button onclick
             window.confirmProceed = confirmProceed;
             window.confirmRefund = confirmRefund;
-            window.confirmRemoveBidder = confirmRemoveBidder;
         });
     </script>
 </body>

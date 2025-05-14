@@ -27,8 +27,8 @@ if (!$auction_id) {
 // Get auction details
 $sUserId = getHighestBidderId($auction_id);
 $auction = getAuctionById($auction_id);
-$sUser = getUserById($sUserId); // Buyer
-$rUser = getUserById($auction["auctionCreatedBy"]); // Vendor
+$sUser = getUserById($sUserId); // Buyer (payer)
+$rUser = getUserById($auction["auctionCreatedBy"]); // Seller (farmer)
 $highest_bid = getHighestBid($auction_id);
 $accountNo = getUserAccountNo($auction["auctionCreatedBy"]);
 
@@ -46,28 +46,37 @@ if (!$is_highest_bidder) {
 
 // Handle payment form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'] ?? null;
-    $cardNumber = $_POST['cardNumber'] ?? null;
-    $expiryMonth = $_POST['expiryMonth'] ?? null;
-    $expiryYear = $_POST['expiryYear'] ?? null;
-    $cvv = $_POST['cvv'] ?? null;
+    header('Content-Type: application/json');
+    
+    $username = $_POST['username'] ?? '';
+    $cardNumber = $_POST['cardNumber'] ?? '';
+    $expiryMonth = $_POST['expiryMonth'] ?? '';
+    $expiryYear = $_POST['expiryYear'] ?? '';
+    $cvv = $_POST['cvv'] ?? '';
+    $termsAccepted = isset($_POST['terms']) && $_POST['terms'] === 'on';
 
-    // Server-side validation
-    if (!$username || !$cardNumber || !$expiryMonth || !$expiryYear || !$cvv) {
-        header('Content-Type: application/json');
-        echo json_encode(['error' => 'All fields are required.']);
+    // Validate inputs
+    if (empty($username) || empty($cardNumber) || empty($expiryMonth) || empty($expiryYear) || empty($cvv)) {
+        ob_clean();
+        echo json_encode(['success' => false, 'error' => 'All fields are required.']);
+        exit();
+    }
+
+    if (!$termsAccepted) {
+        ob_clean();
+        echo json_encode(['success' => false, 'error' => 'You must agree to the Terms and Conditions.']);
         exit();
     }
 
     if (strlen($username) < 2) {
-        header('Content-Type: application/json');
-        echo json_encode(['error' => 'Card owner name must be at least 2 characters.']);
+        ob_clean();
+        echo json_encode(['success' => false, 'error' => 'Card owner name must be at least 2 characters.']);
         exit();
     }
 
     if (!preg_match('/^\d{13,19}$/', $cardNumber)) {
-        header('Content-Type: application/json');
-        echo json_encode(['error' => 'Card number must be 13-19 digits.']);
+        ob_clean();
+        echo json_encode(['success' => false, 'error' => 'Card number must be 13-19 digits.']);
         exit();
     }
 
@@ -77,15 +86,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $currentMonth = (int)$currentDate->format('m');
     $currentYear = (int)$currentDate->format('y');
 
-    if ($month < 1 || $month > 12 || $year < $currentYear || ($year == $currentYear && $month < $currentMonth)) {
-        header('Content-Type: application/json');
-        echo json_encode(['error' => 'Invalid or expired date.']);
+    if ($month < 1 || $month > 12 || $year < $currentYear || ($year === $currentYear && $month < $currentMonth)) {
+        ob_clean();
+        echo json_encode(['success' => false, 'error' => 'Invalid or expired date.']);
         exit();
     }
 
     if (!preg_match('/^\d{3}$/', $cvv)) {
-        header('Content-Type: application/json');
-        echo json_encode(['error' => 'CVV must be 3 digits.']);
+        ob_clean();
+        echo json_encode(['success' => false, 'error' => 'CVV must be 3 digits.']);
         exit();
     }
 
@@ -111,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'amount' => $highest_bid,
         'to' => 'middleman_admin',
         'timestamp' => date('Y-m-d H:i:s'),
-        'status' => 'success' // Changed from 'pending' to 'success'
+        'status' => 'success'
     ];
     $data['transactions'][] = $new_entry;
     $json_success = file_put_contents($json_file, json_encode($data, JSON_PRETTY_PRINT));
@@ -134,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
 
         if ($json_success && $db_success && $stmt->rowCount() > 0) {
-            // Generate PDF Invoice
+            // Generate PDF Invoice for Buyer
             $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
             $pdf->SetMargins(10, 10, 10);
             $pdf->setPrintHeader(false);
@@ -161,7 +170,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </table>
             <table>
                 <tr>
-                    <td>Invoice to<br><strong>' . htmlspecialchars($rUser["userFirstName"] . " " . $rUser["userLastName"]) . '</strong></td>
+                    <td>Invoice to<br><strong>' . htmlspecialchars($sUser["userFirstName"] . " " . $sUser["userLastName"]) . '</strong></td>
                     <td align="right">
                         <strong>Total Paid: ₹' . $highest_bid . '</strong><br>
                         Invoice Date: ' . date("d-m-Y") . '
@@ -208,7 +217,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $pdf_file = 'invoice_auction_' . $auction_id . '.pdf';
             $pdf_content = $pdf->Output($pdf_file, 'S');
 
-            // Send email to vendor
+            // Send email to buyer (payer)
             $mail = new PHPMailer(true);
             try {
                 $mail->isSMTP();
@@ -219,9 +228,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                 $mail->Port = 587;
                 $mail->setFrom('eagri.ct.ws@gmail.com', 'eAgri Auction');
-                $mail->addAddress($rUser["userEmail"]);
+                $mail->addAddress($sUser["userEmail"]);
                 $mail->isHTML(true);
-                $mail->Subject = 'Payment Received for Auction ID: ' . $auction_id;
+                $mail->Subject = 'Payment Confirmation for Auction ID: ' . $auction_id;
                 $mail->Body = '
                 <!DOCTYPE html>
                 <html>
@@ -240,9 +249,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </head>
                 <body>
                     <div class="container py-5">
-                        <h3>Payment Received for Auction ID: ' . $auction_id . '</h3>
-                        <p>Dear <b>' . htmlspecialchars($rUser["userFirstName"] . " " . $rUser["userLastName"]) . '</b>,</p>
-                        <p>The payment for your auction has been received and sent to the middleman admin. Please find the invoice attached.</p>
+                        <h3>Payment Confirmation for Auction ID: ' . $auction_id . '</h3>
+                        <p>Dear <b>' . htmlspecialchars($sUser["userFirstName"] . " " . $sUser["userLastName"]) . '</b>,</p>
+                        <p>Your payment for the auction has been successfully processed and is held by the middleman admin.</p>
                         <h3>Transaction Details</h3>
                         <table>
                             <tr>
@@ -277,10 +286,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $mail->addStringAttachment($pdf_content, $pdf_file, 'base64', 'application/pdf');
                 $mail->send();
             } catch (Exception $e) {
-                error_log("Vendor email failed: " . $e->getMessage());
+                error_log("Buyer email failed: " . $e->getMessage());
             }
 
-            header('Content-Type: application/json');
             ob_clean();
             echo json_encode([
                 'success' => true,
@@ -290,15 +298,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
             exit();
         } else {
-            header('Content-Type: application/json');
             ob_clean();
-            echo json_encode(['error' => 'Database or JSON insertion failed.']);
+            echo json_encode(['success' => false, 'error' => 'Database or JSON insertion failed.']);
             exit();
         }
     } catch (PDOException $e) {
-        header('Content-Type: application/json');
         ob_clean();
-        echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+        echo json_encode(['success' => false, 'error' => 'Database error: ' . $e->getMessage()]);
         exit();
     }
 }
@@ -335,6 +341,9 @@ include("navbar.php");
         .btn-success { background: #28a745; border: none; padding: 12px; font-size: 1rem; font-weight: bold; color: #fff; border-radius: 5px; width: 100%; transition: background 0.3s ease, transform 0.2s ease; }
         .btn-success:hover { background: #218838; transform: translateY(-2px); }
         .btn-success:disabled { background: #6c757d; cursor: not-allowed; transform: none; }
+        .terms-group { display: flex; align-items: center; margin-bottom: 20px; }
+        .terms-group input { margin-right: 10px; }
+        .terms-link { color: #28a745; cursor: pointer; text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -343,6 +352,7 @@ include("navbar.php");
         <div class="card">
             <div class="card-header">Credit Card Payment</div>
             <div class="card-body">
+                <p>Amount: ₹<?php echo $highest_bid; ?></p>
                 <form id="paymentForm" method="POST">
                     <div class="form-group">
                         <label for="username">Card Owner</label>
@@ -380,6 +390,10 @@ include("navbar.php");
                             </div>
                         </div>
                     </div>
+                    <div class="form-group terms-group">
+                        <input type="checkbox" name="terms" id="terms" required>
+                        <label for="terms">I agree to the <span class="terms-link" onclick="showTerms()">Terms and Conditions</span></label>
+                    </div>
                     <button type="submit" id="cnfbtn" class="btn btn-success" disabled>Confirm Payment</button>
                 </form>
             </div>
@@ -397,7 +411,8 @@ include("navbar.php");
             cardNumber: $('#cardNumber'),
             expiryMonth: $('#expiryMonth'),
             expiryYear: $('#expiryYear'),
-            cvv: $('#cvv')
+            cvv: $('#cvv'),
+            terms: $('#terms')
         };
         const errors = {
             username: $('#usernameError'),
@@ -408,56 +423,81 @@ include("navbar.php");
         const submitBtn = $('#cnfbtn');
 
         function showError(field, message) {
-            errors[field].text(message).fadeIn(200);
+            errors[field].text(message).show();
             inputs[field].addClass('input-error shake');
             setTimeout(() => inputs[field].removeClass('shake'), 400);
         }
 
         function clearError(field) {
-            errors[field].fadeOut(200);
+            errors[field].hide();
             inputs[field].removeClass('input-error');
         }
 
-        Object.keys(inputs).forEach(field => {
-            inputs[field].on('input', function() {
-                const value = $(this).val().trim();
-                let isValid = true;
+        function validateField(field) {
+            const value = inputs[field].val().trim();
+            let isValid = true;
 
-                if (field === 'username' && value.length < 2) {
+            if (field === 'username') {
+                if (value.length < 2) {
                     showError('username', 'Name must be at least 2 characters.');
                     isValid = false;
-                } else if (field === 'cardNumber' && (value.length < 13 || value.length > 19 || !/^\d+$/.test(value))) {
+                } else {
+                    clearError('username');
+                }
+            } else if (field === 'cardNumber') {
+                if (!/^\d{13,19}$/.test(value)) {
                     showError('cardNumber', 'Card number must be 13-19 digits.');
                     isValid = false;
-                } else if (field === 'expiryMonth' || field === 'expiryYear') {
-                    const month = parseInt(inputs.expiryMonth.val()) || 0;
-                    const year = parseInt(inputs.expiryYear.val()) || 0;
-                    const currentDate = new Date();
-                    const currentMonth = currentDate.getMonth() + 1;
-                    const currentYear = currentDate.getFullYear() % 100;
+                } else {
+                    clearError('cardNumber');
+                }
+            } else if (field === 'expiryMonth' || field === 'expiryYear') {
+                const month = parseInt(inputs.expiryMonth.val()) || 0;
+                const year = parseInt(inputs.expiryYear.val()) || 0;
+                const currentDate = new Date();
+                const currentMonth = currentDate.getMonth() + 1;
+                const currentYear = currentDate.getFullYear() % 100;
 
-                    if (month < 1 || month > 12 || year < currentYear || (year === currentYear && month < currentMonth)) {
-                        showError('expiryDate', 'Invalid or expired date.');
-                        isValid = false;
-                    } else {
-                        clearError('expiryDate');
-                    }
-                } else if (field === 'cvv' && !/^\d{3}$/.test(value)) {
+                if (month < 1 || month > 12 || year < currentYear || (year === currentYear && month < currentMonth)) {
+                    showError('expiryDate', 'Invalid or expired date.');
+                    isValid = false;
+                } else {
+                    clearError('expiryDate');
+                }
+            } else if (field === 'cvv') {
+                if (!/^\d{3}$/.test(value)) {
                     showError('cvv', 'CVV must be 3 digits.');
                     isValid = false;
                 } else {
-                    clearError(field);
+                    clearError('cvv');
                 }
+            }
+            return isValid;
+        }
 
-                toggleSubmitButton();
-            });
+        Object.keys(inputs).forEach(field => {
+            if (field !== 'terms') {
+                inputs[field].on('input', function() {
+                    validateField(field);
+                    toggleSubmitButton();
+                });
+            }
         });
 
+        inputs.terms.on('change', toggleSubmitButton);
+
         function toggleSubmitButton() {
-            const allFieldsFilled = Object.values(inputs).every(input => input.val().trim() !== '');
+            const allFieldsFilled = Object.values(inputs).every(input => {
+                if (input.attr('type') === 'checkbox') {
+                    return input.is(':checked');
+                }
+                return input.val().trim() !== '';
+            });
             const noErrors = Object.values(errors).every(error => error.is(':hidden'));
             submitBtn.prop('disabled', !(allFieldsFilled && noErrors));
         }
+
+        toggleSubmitButton();
 
         form.on('submit', function(e) {
             e.preventDefault();
@@ -485,10 +525,8 @@ include("navbar.php");
                             confirmButtonText: 'OK',
                             confirmButtonColor: '#28a745',
                             allowOutsideClick: false
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                window.location.href = 'bid.php?id=' + response.auction_id;
-                            }
+                        }).then(() => {
+                            window.location.href = 'bid.php?id=' + response.auction_id;
                         });
                     } else {
                         Swal.fire({
@@ -504,7 +542,7 @@ include("navbar.php");
                     Swal.close();
                     Swal.fire({
                         title: 'Error',
-                        text: 'An error occurred while processing your payment: ' + (xhr.responseText || error),
+                        text: 'An error occurred while processing your payment: ' + (xhr.responseJSON?.error || error),
                         icon: 'error',
                         confirmButtonText: 'OK',
                         confirmButtonColor: '#e74c3c'
@@ -513,6 +551,28 @@ include("navbar.php");
             });
         });
     });
+
+    function showTerms() {
+        Swal.fire({
+            title: 'Terms and Conditions',
+            html: `
+                <div style="text-align: left; line-height: 1.6;">
+                    <p><strong>eAgri Auction Payment Terms</strong></p>
+                    <ul>
+                        <li>The payment of ₹${<?php echo $highest_bid; ?>} for Auction ID ${<?php echo $auction_id; ?>} will be held by the middleman admin until you confirm receipt and quality of the product.</li>
+                        <li>Upon confirmation, 95% of the amount (₹${<?php echo $highest_bid * 0.95; ?>}) will be transferred to the farmer, with 5% (₹${<?php echo $highest_bid * 0.05; ?>}) retained as platform fees (3% maintenance, 2% security).</li>
+                        <li>If you report an issue (e.g., non-delivery, poor quality) within 7 days, you may request a refund by uploading proof (1-3 images). Refunds are subject to admin review.</li>
+                        <li>Failure to confirm or report issues within 7 days may result in the amount being transferred to the farmer, forfeiting your refund rights.</li>
+                        <li>Any fraudulent activity or violation of platform policies may result in account suspension.</li>
+                    </ul>
+                    <p>By agreeing to these terms, you acknowledge and accept the conditions outlined above.</p>
+                </div>
+            `,
+            icon: 'info',
+            confirmButtonText: 'Close',
+            width: '600px'
+        });
+    }
     </script>
 </body>
 </html>

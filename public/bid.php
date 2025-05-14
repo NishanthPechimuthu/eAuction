@@ -229,7 +229,7 @@ $auction_end_date = date("Y-m-d H:i:s", strtotime($auction['auctionEndDate']));
                 <th colspan="2" width="200px" style="text-align: center;"><i class="fa fa-vial"></i>&nbsp; Product Type</th>
               </tr>
               <tr>
-                <td colspan="2" style="text-align: center;">&#8377;<?= htmlspecialchars($auction["auctionProductQuantity"]." ".$auction["auctionProductUnit"]) ?></td>
+                <td colspan="2" style="text-align: center;"><?= htmlspecialchars(number_format($auction["auctionProductQuantity"], 2)." ".$auction["auctionProductUnit"]) ?></td>
                 <td colspan="2" style="text-align: center;"><?= htmlspecialchars($auction["auctionProductType"]) ?></td>
               </tr>
               <tr>

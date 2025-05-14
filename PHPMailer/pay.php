@@ -143,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <td align="right">
                     <img src="./logos/logo.png" height="50px"/><br>
                     1/283, Somvarapatti, Udumalpet, Tiruppur, Tamil Nadu - 642205<br>
-                    <strong>+91-9876543210</strong> | <strong>eagri.ct.ws@gmail.com</strong>
+                    <strong>+91-8015864344</strong> | <strong>22ct19nishanth@gmail.com</strong>
                 </td>
             </tr>
         </table>
@@ -240,7 +240,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="footer">
                         <p>eAgri Auction | 1/283, Somvarapatti, Udumalpet, Tiruppur, Tamil Nadu - 642205</p>
-                        <p><a href="mailto:support@eagriauction.com">support@eagriauction.com</a> | +91-9876543210</p>
+                        <p><a href="mailto:support@eagriauction.com">support@eagriauction.com</a> | +91-8015864344</p>
                     </div>
                 </div>
             </body>

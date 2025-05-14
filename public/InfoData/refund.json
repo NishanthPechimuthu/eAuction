@@ -1,0 +1,18 @@
+{
+    "refunds": [
+        {
+            "transaction_id": "txn_681af6aac04f90.68650128",
+            "auction_id": "23",
+            "vendor_id": "2",
+            "farmer_id": "1",
+            "amount": "550.00",
+            "image_paths": [
+                "..\/images\/refund\/txn_681af6aac04f90.68650128_proof_0_1000017900.jpg",
+                "..\/images\/refund\/txn_681af6aac04f90.68650128_proof_1_1000017898.jpg",
+                "..\/images\/refund\/txn_681af6aac04f90.68650128_proof_2_1000017799.jpg"
+            ],
+            "status": "pending_admin_review",
+            "timestamp": "2025-05-07 11:31:01"
+        }
+    ]
+}
