@@ -24,10 +24,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php include_once("../assets/link.html"); ?>
     <link href="../assets/styles.css" rel="stylesheet" />
     <style>
-/* Custom Scrollbar Styling */
+    /* Custom Scrollbar Styling */
 ::-webkit-scrollbar {
     width: 10px;
-    height: 10px;
+    height: 4px;
 }
 
 /* Track */
@@ -38,13 +38,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: linear-gradient(45deg, #ADFF2F, #FFD700);
+    background: #ADFF2F;
     border-radius: 10px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(45deg, #90EE90, #FFA500);
+    background: #feff2f;
 }
         td {
             height: 50px;

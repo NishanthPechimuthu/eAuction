@@ -104,7 +104,7 @@ try {
                         <p><strong>Category:</strong> {$auction['categoryName']}</p>
                         <p><strong>Description:</strong> {$auction['auctionDescription']}</p>
                         <p><strong>Ends On:</strong> {$auction['auctionEndDate']}</p>
-                        <a href='https://eagri.ct.ws/eAuction/public/bid.php?id={$auction['auctionId']}' 
+                        <a href='http://localhost/eAuction/public/bid.php?id={$auction['auctionId']}' 
                            style='display:inline-block; background:#228B22; color:#fff; padding:8px 16px; border-radius:50px; text-decoration:none;'>
                            View Auction
                         </a>
@@ -177,7 +177,7 @@ $mail->Body = "
                 </span>
             </p>
             <p>
-                <a href='https://eagri.ct.ws/eAuction/public/bid.php?id={$auctionId}' 
+                <a href='http://localhost/eAuction/public/bid.php?id={$auctionId}' 
                    style='display: inline-block; background: #228B22; color: #fff; padding: 10px 20px; border-radius: 50px; text-decoration: none; font-weight: bold;'>
                    Pay Now
                 </a>

@@ -662,6 +662,28 @@ usort($non_pending_refunds, function($a, $b) {
     <link href="../assets/css/table-styles.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
+    /* Custom Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 4px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f0f0f0; 
+    border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #ADFF2F;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #feff2f;
+}
         .table-responsive { overflow-x: auto; }
         td, th {
             min-width: 100px;
@@ -707,6 +729,13 @@ usort($non_pending_refunds, function($a, $b) {
 </head>
 <body>
     <div class="container py-4">
+      <h1 class="mt-4">Manage Refund</h1>
+      <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item">
+          <a href="dashboard.php">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Manage Refund</li>
+      </ol>
         <!-- Pending Refunds Table -->
         <div class="card mb-4 shadow-sm">
             <div class="card-header bg-primary text-white">

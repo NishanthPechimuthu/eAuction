@@ -63,6 +63,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php include_once("../assets/link.html"); ?>
     <link href="../assets/css/table-styles.css" rel="stylesheet" />
     <style>
+    /* Custom Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 4px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f0f0f0; 
+    border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #ADFF2F;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #feff2f;
+}
         td img {
             width: 60px;
             height: 60px;
@@ -79,7 +101,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 <div class="container py-4">
-
+      <h1 class="mt-4">Manage Issues</h1>
+      <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item">
+          <a href="dashboard.php">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Manage Issues</li>
+      </ol>
     <!-- Image Modal -->
     <div class="modal fade" id="imageModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-lg">
